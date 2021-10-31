@@ -2,9 +2,7 @@ package com.beshoy.thirdwayvcalculator.domain.command
 
 import com.beshoy.thirdwayvcalculator.domain.service.Calculator
 import com.beshoy.thirdwayvcalculator.domain.service.ExecutionServiceImpl
-import org.junit.Assert.*
-import org.junit.Before
-
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class AddCommandTest {
@@ -25,5 +23,14 @@ class AddCommandTest {
         executionService.execute(AddCommand(calculator, 2))
         executionService.execute(AddCommand(calculator, 3))
         assertEquals(5, calculator.currentValue)
+    }
+
+    @Test
+    fun redo(){
+        executionService.execute(AddCommand(calculator, 2))
+        executionService.execute(AddCommand(calculator, 3))
+        executionService.undo()
+        executionService.redo()
+        assertEquals(5,calculator.currentValue)
     }
 }

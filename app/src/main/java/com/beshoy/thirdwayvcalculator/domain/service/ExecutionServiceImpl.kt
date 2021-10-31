@@ -1,7 +1,8 @@
 package com.beshoy.thirdwayvcalculator.domain.service
 
-import com.beshoy.thirdwayvcalculator.domain.command.Command
-import com.beshoy.thirdwayvcalculator.domain.command.UndoableCommand
+import com.beshoy.thirdwayvcalculator.domain.command.interfaces.Command
+import com.beshoy.thirdwayvcalculator.domain.command.interfaces.UndoableCommand
+import com.beshoy.thirdwayvcalculator.domain.service.interfaces.ExecutionService
 import java.util.*
 
 

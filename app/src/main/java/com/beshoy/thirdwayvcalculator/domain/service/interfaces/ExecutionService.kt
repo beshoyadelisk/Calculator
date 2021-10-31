@@ -1,6 +1,6 @@
-package com.beshoy.thirdwayvcalculator.domain.service
+package com.beshoy.thirdwayvcalculator.domain.service.interfaces
 
-import com.beshoy.thirdwayvcalculator.domain.command.Command
+import com.beshoy.thirdwayvcalculator.domain.command.interfaces.Command
 
 
 interface ExecutionService {

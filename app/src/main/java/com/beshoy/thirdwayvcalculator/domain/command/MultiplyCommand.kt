@@ -4,16 +4,16 @@ import com.beshoy.thirdwayvcalculator.domain.command.interfaces.UndoableCommand
 import com.beshoy.thirdwayvcalculator.domain.service.Calculator
 
 
-class AddCommand(
+class MultiplyCommand(
     private val calculator: Calculator,
     private val value: Int
 ) : UndoableCommand {
     override fun undo() {
-        calculator.subtract(value)
+        calculator.divide(value)
     }
 
     override fun execute(): Boolean {
-        calculator.add(value)
+        calculator.multiply(value)
         return true
     }
 }
