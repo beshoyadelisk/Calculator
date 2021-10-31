@@ -18,6 +18,11 @@ class OperationAdapter(private var operationListener: OperationListener) :
         notifyItemInserted(0)
     }
 
+    fun clearOperations() {
+        val count = itemCount
+        operationList.clear()
+        notifyItemRangeRemoved(0, count)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(

@@ -1,6 +1,8 @@
 package com.beshoy.thirdwayvcalculator.ui
 
+import android.content.Context
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity(), OperationListener {
         binding.btnSub.setOnClickListener { viewModel.setSelectedOperation(OperationsEnum.SUB) }
         binding.btnMulti.setOnClickListener { viewModel.setSelectedOperation(OperationsEnum.MULTI) }
         binding.btnDivide.setOnClickListener { viewModel.setSelectedOperation(OperationsEnum.DIVIDE) }
+        binding.btnClear.setOnClickListener { viewModel.clearData() }
         binding.btnEqual.setOnClickListener {
             viewModel.calculateResult(binding.etOperand.text.toString().toInt())
         }
@@ -46,7 +49,7 @@ class MainActivity : AppCompatActivity(), OperationListener {
 
     private fun iniRecycler() {
         binding.recyclerView.layoutManager =
-            GridLayoutManager(this, 4)
+            GridLayoutManager(this, 3)
         binding.recyclerView.adapter = adapter
     }
 
@@ -56,6 +59,7 @@ class MainActivity : AppCompatActivity(), OperationListener {
         viewModel.operationItem.observe(this) { operationItemObserver(it) }
         viewModel.isUndoable.observe(this) { undoableObserver(it) }
         viewModel.isRedoable.observe(this) { redoableObserver(it) }
+        viewModel.clearAdapter.observe(this) { adapter.clearOperations() }
     }
 
     private fun redoableObserver(isRedoable: Boolean) {
@@ -75,14 +79,21 @@ class MainActivity : AppCompatActivity(), OperationListener {
     private fun lastValueObserver(result: Int) {
         val resultString = "Result = $result"
         binding.textView.text = resultString
+        binding.btnClear.isEnabled = true
         clearSelection()
     }
 
     private fun operationObserver(it: OperationsEnum) {
-        if (it == OperationsEnum.NOT_SPECIFIED) binding.toggleGroup.clearChecked()
+        if (it == OperationsEnum.NOT_SPECIFIED) {
+            binding.toggleGroup.clearChecked()
+            binding.etOperand.text.clear()
+            binding.etOperand.isEnabled = false
+        }
         else {
             binding.etOperand.isEnabled = true
             binding.etOperand.requestFocus()
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(binding.etOperand, InputMethodManager.SHOW_IMPLICIT)
         }
     }
 
@@ -95,4 +106,5 @@ class MainActivity : AppCompatActivity(), OperationListener {
     override fun onItemClicked(position: Int) {
         viewModel.undoAction(position)
     }
+
 }

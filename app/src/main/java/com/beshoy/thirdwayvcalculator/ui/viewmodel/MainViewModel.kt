@@ -3,10 +3,7 @@ package com.beshoy.thirdwayvcalculator.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.beshoy.thirdwayvcalculator.domain.command.AddCommand
-import com.beshoy.thirdwayvcalculator.domain.command.DivideCommand
-import com.beshoy.thirdwayvcalculator.domain.command.MultiplyCommand
-import com.beshoy.thirdwayvcalculator.domain.command.SubtractCommand
+import com.beshoy.thirdwayvcalculator.domain.command.*
 import com.beshoy.thirdwayvcalculator.domain.model.OperationItem
 import com.beshoy.thirdwayvcalculator.domain.model.OperationsEnum
 import com.beshoy.thirdwayvcalculator.domain.service.Calculator
@@ -19,6 +16,10 @@ class MainViewModel : ViewModel() {
 
     private val mSelectedOperation = MutableLiveData<OperationsEnum>()
     val selectedOperation: LiveData<OperationsEnum> get() = mSelectedOperation
+
+    private val mClearAdapter = MutableLiveData<Boolean>()
+    val clearAdapter: LiveData<Boolean> get() = mClearAdapter
+
 
     private val mOperationItem = MutableLiveData<OperationItem>()
     val operationItem: LiveData<OperationItem> get() = mOperationItem
@@ -33,7 +34,10 @@ class MainViewModel : ViewModel() {
     val isRedoable: LiveData<Boolean> get() = mIsRedoable
 
     fun setSelectedOperation(operation: OperationsEnum) {
-        mSelectedOperation.value = operation
+        if (mSelectedOperation.value == operation)
+            mSelectedOperation.value = OperationsEnum.NOT_SPECIFIED
+        else
+            mSelectedOperation.value = operation
     }
 
     fun removeSelections() {
@@ -91,6 +95,14 @@ class MainViewModel : ViewModel() {
     private fun checkRedoUndoActions() {
         mIsRedoable.value = executionService.hasRedoAbleCommand()
         mIsUndoable.value = executionService.hasUndoableCommand()
+    }
+
+    fun clearData() {
+        executionService.execute(ClearCommand(executionService, calculator))
+        removeSelections()
+        mLastValue.value = calculator.currentValue
+        checkRedoUndoActions()
+        mClearAdapter.value = true
     }
 
 
