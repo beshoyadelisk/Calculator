@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity(), OperationListener {
         binding.btnRedo.setOnClickListener { viewModel.redoAction() }
         binding.btnUndo.setOnClickListener { viewModel.undoAction() }
     }
+
     private fun initAdapter() {
         adapter = OperationAdapter(this)
     }
@@ -92,6 +93,6 @@ class MainActivity : AppCompatActivity(), OperationListener {
     }
 
     override fun onItemClicked(position: Int) {
-
+        viewModel.undoAction(position)
     }
 }

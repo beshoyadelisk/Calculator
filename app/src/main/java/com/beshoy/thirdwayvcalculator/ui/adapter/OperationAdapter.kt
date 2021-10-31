@@ -18,10 +18,6 @@ class OperationAdapter(private var operationListener: OperationListener) :
         notifyItemInserted(0)
     }
 
-    fun removeOperation(position: Int) {
-        operationList.removeAt(position)
-        notifyItemRemoved(position)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -69,7 +65,9 @@ class OperationAdapter(private var operationListener: OperationListener) :
         }
 
         override fun onClick(v: View?) {
-
+            if (adapterPosition >= 0) {
+                operationListener.onItemClicked(adapterPosition)
+            }
         }
     }
 }

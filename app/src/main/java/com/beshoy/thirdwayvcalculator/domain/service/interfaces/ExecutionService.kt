@@ -10,7 +10,11 @@ interface ExecutionService {
 
     fun redo(): Boolean
 
+    fun undoAt(position: Int): Boolean
+
     fun hasUndoableCommand(): Boolean
+
+    fun hasUndoableCommandAt(position: Int): Boolean
 
     fun hasRedoAbleCommand(): Boolean
 

@@ -29,6 +29,7 @@ class ExecutionServiceImpl : ExecutionService {
         return undoCommand(undoStack.pop())
     }
 
+
     override fun redo(): Boolean {
         if (redoStack.isEmpty()) {
             return false
@@ -40,6 +41,19 @@ class ExecutionServiceImpl : ExecutionService {
             return true
         } ?: return false
 
+    }
+
+    override fun undoAt(position: Int): Boolean {
+        if (undoStack.isEmpty()) {
+            return false
+        }
+        val command = undoStack[position]
+        undoStack.removeAt(position)
+        command?.let {
+            redoStack.push(it)
+            it.undo()
+            return true
+        } ?: return false
     }
 
 
@@ -54,6 +68,10 @@ class ExecutionServiceImpl : ExecutionService {
 
     override fun hasUndoableCommand(): Boolean {
         return undoStack.isNotEmpty()
+    }
+
+    override fun hasUndoableCommandAt(position: Int): Boolean {
+        return undoStack.size > position
     }
 
     override fun hasRedoAbleCommand(): Boolean {

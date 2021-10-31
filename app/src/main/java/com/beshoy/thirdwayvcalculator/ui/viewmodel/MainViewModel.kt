@@ -80,6 +80,14 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun undoAction(position: Int) {
+        if (executionService.hasUndoableCommandAt(position)) {
+            executionService.undoAt(position)
+            mLastValue.value = calculator.currentValue
+            checkRedoUndoActions()
+        }
+    }
+
     private fun checkRedoUndoActions() {
         mIsRedoable.value = executionService.hasRedoAbleCommand()
         mIsUndoable.value = executionService.hasUndoableCommand()
